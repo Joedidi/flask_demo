@@ -1,0 +1,103 @@
+var app = getApp();
+Page({
+    data: {
+        statusType: ["待付款", "待发货", "待收货", "待评价", "已完成", "已关闭"],
+        status: ["-8", "-7", "-6", "-5", "1", "0"],
+        currentType: 0,
+        tabClass: ["", "", "", "", "", ""]
+    },
+    statusTap: function (e) {
+        var curType = e.currentTarget.dataset.index;
+        this.data.currentType = curType;
+        this.setData({
+            currentType: curType
+        });
+        this.onShow();
+    },
+    orderDetail: function (e) {
+        wx.navigateTo({
+            url: "/pages/my/order_info"
+        })
+    },
+
+    onShow: function () {
+        var that = this;
+        that.setData({
+            order_list: [
+                {
+                    status: -8,
+                    status_desc: "待支付",
+                    date: "2018-07-01 22:30:23",
+                    order_number: "20180701223023001",
+                    note: "记得周六发货",
+                    total_price: "85.00",
+                    goods_list: [
+                        {
+                            pic_url: "/images/food.jpg"
+                        },
+                        {
+                            pic_url: "/images/food.jpg"
+                        }
+                    ]
+                }
+            ]
+        });
+        this.getPayOrder();
+    },
+
+    getPayOrder: function () {
+        var that = this;
+        wx.request({
+            url: app.buildUrl('/my/order'),
+            header: app.getRequestHeader(),
+            data: {
+                status: this.data.status[that.data.currentType]
+            },
+            success(res) {
+                var resp = res.data;
+                if (resp.code != 200) {
+                    app.alert({'content': resp.msg});
+                    return
+                }
+                // console.log(resp.data.pay_order_list);
+                that.setData({
+                    order_list: resp.data.pay_order_list,
+                });
+            }
+        })
+    },
+
+    toPay: function (e) {
+        var that = this;
+        wx.request({
+            url: app.buildUrl('/order/pay'),
+            header: app.getRequestHeader(),
+            method: "POST",
+            data: {
+                order_sn: e.currentTarget.dataset.id
+            },
+            success(res) {
+                var resp = res.data;
+                if (resp.code != 200) {
+                    app.alert({'content': resp.msg});
+                    return;
+                }
+                console.log(resp.data.pay_info);
+                var pay_info = resp.data.pay_info;
+                wx.requestPayment({
+                    timeStamp: '',
+                    nonceStr: '',
+                    package: '',
+                    signType: 'MD5',
+                    paySign: '',
+                    success(res) {
+                    },
+                    fail(res) {
+                    }
+                })
+
+            }
+        })
+    }
+
+})
