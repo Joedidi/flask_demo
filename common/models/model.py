@@ -240,7 +240,7 @@ class PayOrder(db.Model):
         order_number = order_number + str(self.id).zfill(5)
         return order_number
 
-class PayOrderCallbackDatum(db.Model):
+class PayOrderCallbackData(db.Model):
     __tablename__ = 'pay_order_callback_data'
 
     id = db.Column(db.Integer, primary_key=True)

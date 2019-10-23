@@ -8,7 +8,7 @@
 """
 import decimal
 from application import app, db
-from common.models.model import Food, PayOrderItem, PayOrder
+from common.models.model import Food, PayOrderItem, PayOrder, PayOrderCallbackData
 import time,random
 import hashlib
 from common.libs.Helper import getCurrentDate
@@ -145,4 +145,21 @@ class PayService():
         #     "member_id": pay_order_info.member_id,
         #     "pay_order_id": pay_order_info.id
         # })
+        return True
+
+
+
+    def addPayCallbackData(self,pay_order_id = 0,type = 'pay',data = ''):
+        model_callback = PayOrderCallbackData()
+        model_callback.pay_order_id = pay_order_id
+        if type == "pay":
+            model_callback.pay_data = data
+            model_callback.refund_data = ''
+        else:
+            model_callback.refund_data = data
+            model_callback.pay_data = ''
+
+        model_callback.created_time = model_callback.updated_time = getCurrentDate()
+        db.session.add( model_callback )
+        db.session.commit()
         return True
