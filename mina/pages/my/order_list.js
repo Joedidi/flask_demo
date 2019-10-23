@@ -85,14 +85,16 @@ Page({
                 console.log(resp.data.pay_info);
                 var pay_info = resp.data.pay_info;
                 wx.requestPayment({
-                    timeStamp: '',
-                    nonceStr: '',
-                    package: '',
-                    signType: 'MD5',
-                    paySign: '',
-                    success(res) {
+                    'timeStamp': pay_info.timeStamp,
+                    'nonceStr': pay_info.nonceStr,
+                    'package': pay_info.package,
+                    'signType': 'MD5',
+                    'paySign': pay_info.paySign,
+                    'success': function (res) {
+
                     },
-                    fail(res) {
+                    'fail': function (res) {
+
                     }
                 })
 
