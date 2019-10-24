@@ -123,7 +123,7 @@ class Member(db.Model):
         return sex_mapping[str(self.sex)]
 
 
-class MemberAddres(db.Model):
+class MemberAddress(db.Model):
     __tablename__ = 'member_address'
     __table_args__ = (
         db.Index('idx_member_id_status', 'member_id', 'status'),
@@ -157,7 +157,7 @@ class MemberCart(db.Model):
     created_time = db.Column(db.DateTime, nullable=False, server_default=db.FetchedValue())
 
 
-class MemberComment(db.Model):
+class MemberComments(db.Model):
     __tablename__ = 'member_comments'
 
     id = db.Column(db.Integer, primary_key=True)

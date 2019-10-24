@@ -162,3 +162,28 @@ class PayService():
         db.session.add( model_callback )
         db.session.commit()
         return True
+
+    def closeOrder(self, pay_order_id=0):
+        if pay_order_id < 1:
+            return False
+        pay_order_info = PayOrder.query.filter_by(id=pay_order_id, status=-8).first()
+        if not pay_order_info:
+            return False
+
+        pay_order_items = PayOrderItem.query.filter_by(pay_order_id=pay_order_id).all()
+        if pay_order_items:
+            # 需要归还库存
+            for item in pay_order_items:
+                tmp_food_info = Food.query.filter_by(id=item.food_id).first()
+                if tmp_food_info:
+                    tmp_food_info.stock = tmp_food_info.stock + item.quantity
+                    tmp_food_info.updated_time = getCurrentDate()
+                    db.session.add(tmp_food_info)
+                    db.session.commit()
+                    FoodService.setStockChangeLog(item.food_id, item.quantity, "订单取消")
+
+        pay_order_info.status = 0
+        pay_order_info.updated_time = getCurrentDate()
+        db.session.add(pay_order_info)
+        db.session.commit()
+        return True

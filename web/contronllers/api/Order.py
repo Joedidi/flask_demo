@@ -9,14 +9,15 @@
 
 from web.contronllers.api import route_api
 from flask import request, jsonify, g
-from common.models.model import Food, MemberCart, PayOrder, OauthMemberBind
+from common.models.model import Food, PayOrder, OauthMemberBind
 from common.libs.pay.payService import PayService
 from common.libs.pay.WeChatService import WeChatService
-from common.libs.Helper import selectFilterObj, getDictFilterField
+from common.libs.Helper import getCurrentDate
 from common.libs.UrlManager import UrlManager
 from common.libs.member.CartService import CartService
 import json, decimal
 from application import app, db
+
 
 
 @route_api.route('/order/info', methods=["POST"])
@@ -201,3 +202,33 @@ def orderCallback():
     target_pay.orderSuccess(pay_order_id=pay_order_info.id, params={"pay_sn": callback_data['transaction_id']})
     target_pay.addPayCallbackData(pay_order_id=pay_order_info.id, data=request.data)
     return target_wechat.dict_to_xml(result_data), header
+
+
+@route_api.route("/order/ops", methods=[ "POST"])
+def orderOps():
+	resp = {'code': 200, 'msg': '操作成功~', 'data': {}}
+	req = request.values
+	member_info = g.member_info
+	order_sn = req['order_sn'] if 'order_sn' in req else ''
+	act = req['act'] if 'act' in req else ''
+	pay_order_info = PayOrder.query.filter_by(order_sn=order_sn, member_id=member_info.id).first()
+	if not pay_order_info:
+		resp['code'] = -1
+		resp['msg'] = "系统繁忙。请稍后再试~~"
+		return jsonify(resp)
+
+
+	if act == "cancel":
+		target_pay = PayService( )
+		ret = target_pay.closeOrder( pay_order_id=pay_order_info.id )
+		if not ret:
+			resp['code'] = -1
+			resp['msg'] = "系统繁忙。请稍后再试~~"
+			return jsonify(resp)
+	elif act == "confirm":
+		pay_order_info.express_status = 1
+		pay_order_info.updated_time = getCurrentDate()
+		db.session.add( pay_order_info )
+		db.session.commit()
+
+	return jsonify(resp)

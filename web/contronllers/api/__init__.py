@@ -14,6 +14,7 @@ from web.contronllers.api.Food import *
 from web.contronllers.api.Cart import *
 from web.contronllers.api.Order import *
 from web.contronllers.api.My import *
+from web.contronllers.api.Address import *
 
 @route_api.route('/')
 def index():

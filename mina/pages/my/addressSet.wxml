@@ -38,7 +38,7 @@
             </view>
         </view>
     </view>
-    <button type="warn" class="save-btn" formType="submit">保存</button>
+    <button type="warn" class="save-btn" formType="submit" >保存</button>
     <button type="default" class="save-btn" bindtap="deleteAddress">删除该地址</button>
     <button type="default" class="cancel-btn" bindtap="bindCancel">取消</button>
     </form>

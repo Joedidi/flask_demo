@@ -100,6 +100,42 @@ Page({
 
             }
         })
+    },
+    orderConfirm: function (e) {
+        this.orderOps(e.currentTarget.dataset.id, "confirm", "确定收到？");
+    },
+    orderCancel: function (e) {
+        this.orderOps(e.currentTarget.dataset.id, "cancel", "确定取消订单？");
+    },
+    orderComment: function (e) {
+        wx.navigateTo({
+            url: "/pages/my/comment?order_sn=" + e.currentTarget.dataset.id
+        });
+    },
+    orderOps: function (order_sn, act, msg) {
+        var that = this;
+        var params = {
+            "content": msg,
+            "cb_confirm": function () {
+                wx.request({
+                    url: app.buildUrl("/order/ops"),
+                    header: app.getRequestHeader(),
+                    method: 'POST',
+                    data: {
+                        order_sn: order_sn,
+                        act: act
+                    },
+                    success: function (res) {
+                        var resp = res.data;
+                        app.alert({"content": resp.msg});
+                        if (resp.code == 200) {
+                            that.getPayOrder();
+                        }
+                    }
+                });
+            }
+        };
+        app.tip(params);
     }
 
 })
