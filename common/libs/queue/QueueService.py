@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import  json
-from common.models.queue.QueueList import QueueList
+from common.models.model import QueueList
 from common.libs.Helper import getCurrentDate
 from application import app,db
 class QueueService():

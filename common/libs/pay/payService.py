@@ -14,6 +14,7 @@ import hashlib
 from common.libs.Helper import getCurrentDate
 from common.libs.food.FoodService import FoodService
 from common.models.model import FoodSaleChangeLog
+from common.libs.queue.QueueService import QueueService
 
 class PayService():
     def __init__(self):
@@ -140,14 +141,12 @@ class PayService():
             print(e)
             return False
 
-        # # 加入通知队列，做消息提醒和
-        # QueueService.addQueue("pay", {
-        #     "member_id": pay_order_info.member_id,
-        #     "pay_order_id": pay_order_info.id
-        # })
+        # 加入通知队列，做消息提醒和
+        QueueService.addQueue("pay", {
+            "member_id": pay_order_info.member_id,
+            "pay_order_id": pay_order_info.id
+        })
         return True
-
-
 
     def addPayCallbackData(self,pay_order_id = 0,type = 'pay',data = ''):
         model_callback = PayOrderCallbackData()
