@@ -28,7 +28,7 @@ from web.contronllers.finance.Finance import route_finance
 from web.contronllers.stat.Stat import route_stat
 from web.contronllers.upload.Upload import route_upload
 from web.contronllers.api import route_api
-
+from web.contronllers.chart import route_chart
 
 
 app.register_blueprint(route_user ,url_prefix = '/user')
@@ -50,3 +50,6 @@ app.register_blueprint(route_stat ,url_prefix = '/stat')
 app.register_blueprint(route_api ,url_prefix = '/api')
 
 app.register_blueprint(route_upload ,url_prefix = '/upload')
+
+
+app.register_blueprint(route_chart ,url_prefix = '/chart')

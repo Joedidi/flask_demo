@@ -2,13 +2,7 @@
 
 from application import app,db
 from common.libs.Helper import getFormatDate,getCurrentDate
-from common.models.member.Member import Member
-from common.models.pay.PayOrder import PayOrder
-from common.models.stat.StatDailyFood import StatDailyFood
-from common.models.stat.StatDailySite import StatDailySite
-from common.models.stat.StatDailyMember import StatDailyMember
-from common.models.food.WxShareHistory import WxShareHistory
-from common.models.food.FoodSaleChangeLog import FoodSaleChangeLog
+from common.models.model import Member,PayOrder,StatDailyFood,StatDailySite,StatDailyMember,WxShareHistory,FoodSaleChangeLog
 from sqlalchemy import func
 import random
 '''
@@ -201,7 +195,7 @@ class JobTask():
             self.statSite( tmp_params )
 
     def testFood(self,date):
-        from common.models.food.Food import Food
+        from common.models.model import Food
         list = Food.query.all()
         if list:
             for item in list:

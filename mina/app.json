@@ -6,11 +6,11 @@
     "pages/food/info",
     "pages/order/index",
     "pages/cart/index",
-
     "pages/my/order_list",
     "pages/my/order_info",
     "pages/my/addressList",
     "pages/my/addressSet",
+    "pages/my/comment",
     "pages/my/commentList",
     "pages/my/index",
     "pages/logs/logs"
