@@ -1,0 +1,21 @@
+version: '3'
+networks:
+  myapp:
+services:
+  casual:
+    build:
+      mysite        >>>>对应我们的mysite文件夹
+    ports:
+      - "5000"      >>>>对应我们的py文件中port
+    networks:
+      - myapp	     >>>对应上面的myapp
+  casual2:
+    build:
+      nginx         >>>对应我们的nginx文件夹
+    networks:
+      - myapp	     >>>对应上面的myapp
+    depends_on:
+      - casual       >>>依赖于casual
+    ports:
+      - "8080:80"    >>>设置端口号8080映射80
+
