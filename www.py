@@ -53,3 +53,6 @@ app.register_blueprint(route_upload ,url_prefix = '/upload')
 
 
 app.register_blueprint(route_chart ,url_prefix = '/chart')
+
+
+1233133
